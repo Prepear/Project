@@ -11,5 +11,8 @@ namespace Project1.Models
         public int car_id { get; set; }
         public string car_serial { get; set; }
 
+        public int train_set_model_id { get; set; }
+        public string train_set_model_name { get; set; }
+
     }
 }

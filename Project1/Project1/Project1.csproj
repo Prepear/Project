@@ -81,7 +81,7 @@
     <Compile Include="Models\carModel.cs" />
     <Compile Include="Models\lineModel.cs" />
     <Compile Include="Models\operationcostModel.cs" />
-    <Compile Include="Models\serviceroute.cs" />
+    <Compile Include="Models\servicerouteModel.cs" />
     <Compile Include="Models\stationModel.cs" />
     <Compile Include="operationcost.cs">
       <SubType>UserControl</SubType>
@@ -183,5 +183,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -81,8 +81,10 @@ namespace Project1
                 model.line_id =(int) row.Cells["line_id"].Value;
                 model.line_name = row.Cells["line_name"].Value.ToString();
                 textBox2.Text = row.Cells["line_name"].Value.ToString();
-                dataGridView1.Columns[0].HeaderText = "LINE NAME";
-              
+              //  dataGridView1.Columns[0].HeaderText = "LINE NAME";
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[1].HeaderText = "LINE NAME";
+
 
 
             }

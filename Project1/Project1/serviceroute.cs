@@ -16,9 +16,8 @@ namespace Project1
     {
         SqlConnection con = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Project1\Project1\ProjectTSP.mdf;Integrated Security = True; Connect Timeout = 30");
         SqlCommand command = new SqlCommand();
-        serviceroute model = new serviceroute();
-        lineModel _lineModel = new lineModel();
-        stationModel _stationModel = new stationModel();
+        servicerouteModel model = new servicerouteModel();
+        
 
         public serviceroute()
         {
@@ -30,6 +29,9 @@ namespace Project1
             command.Connection = con;
             FIllcombo();
             comboBox2.SelectedIndex = -1;
+            FIllchecklist();
+            
+
         }
 
         void FIllcombo()
@@ -50,18 +52,19 @@ namespace Project1
             if ( textBox1.Text != "" & checkedListBox1.Text!="" & comboBox2.Text != "")
             {
                 con.Open();
-             //   command.CommandText = "insert into ServiceRoute (service_route_name,line_id,station_id) values( ' " + textBox1.Text + " ',' " + _lineModel.line_id + " ', '" + _stationModel.station_id + " ' ) ";
+             //   command.CommandText = "insert into ServiceRoute (service_route_name,line_id,station_id) values( ' " + textBox1.Text + " ',' " + model.line_id + " ', '" + model.station_id + " ' ) ";
                 command.ExecuteNonQuery();
                 con.Close();
                // model.car_id = 0;
-              //  _trainsetModel.train_set_model_id = 0;
+              //  model.train_set_model_id = 0;
                 MessageBox.Show("Save Complete");
                 textBox1.Clear();
               //  textBox2.Clear();
               //  comboBox1.SelectedIndex = -1;
                 comboBox2.SelectedIndex = -1;
+              
 
-               
+
                 foreach (int i in checkedListBox1.CheckedIndices)
                 {
                     checkedListBox1.SetItemCheckState(i, CheckState.Unchecked);
@@ -136,7 +139,7 @@ namespace Project1
                 con.Close();
                 MessageBox.Show("Delete Complete");
                 model.car_id = 0;
-                _trainsetModel.train_set_model_id = 0;
+                model.train_set_model_id = 0;
                 textBox1.Clear();
                 textBox2.Clear();
                 comboBox1.SelectedIndex = -1;
@@ -154,12 +157,12 @@ namespace Project1
             /*if (textBox2.Text != "" & textBox1.Text != "" & comboBox1.Text != "" & comboBox2.Text != "")
             {
                 con.Open();
-                command.CommandText = "update Car set car_serial= ' " + textBox2.Text + " ' ,seat_capacity=' " + textBox1.Text + " ' , seat_type=' " + comboBox1.Text + "' ,train_set_model_id= '  " + _trainsetModel.train_set_model_id + "   '  where car_id=' " + model.car_id + " '  ";
+                command.CommandText = "update Car set car_serial= ' " + textBox2.Text + " ' ,seat_capacity=' " + textBox1.Text + " ' , seat_type=' " + comboBox1.Text + "' ,train_set_model_id= '  " + model.train_set_model_id + "   '  where car_id=' " + model.car_id + " '  ";
                 command.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Edit Complete");
                 model.car_id = 0;
-                _trainsetModel.train_set_model_id = 0;
+                model.train_set_model_id = 0;
                 textBox1.Clear();
                 textBox2.Clear();
                 comboBox1.SelectedIndex = -1;
@@ -172,25 +175,101 @@ namespace Project1
             }*/
         }
 
+        /*  private void fill_checkListBox()
+          {
+
+
+              try
+              {
+                  con.Open();
+
+                  //for reading purpose, I break down by long statement 
+                  //In this statement, I left join 3 table (Teacher_Detail,  AppUser_Detail, and Application_Detail table). My AppUser_Detail contains all 3 id (teacherId, applicationId, and AppUserId). I then set filter the table using `where` keyWord to make the applicationId = the comboBox text 
+
+                  string query = @"SELECT
+                                    td.chineseName,
+                                    ad.applicationId,
+                                    aud.applicationId,
+                                    ad.applicationName
+                                FROM[AppUser_Detail] as aud
+                                LEFT JOIN[Teacher_Detail] as td
+                                ON aud.teacherId = td.teacherId
+                                LEFT JOIN[Application_Detail] as ad
+                                ON aud.applicationId = ad.applicationId
+                                where aud.applicationId = '" + applicationComboBox.Text + "' AND NOT(td.teacherId IS NULL)
+  ";
+                  myCommand = new SqlCommand(query, con);
+
+
+                  //reading the value from the query
+                  SqlDataReader dr = myCommand.ExecuteReader();
+
+                  //Reading all the value one by one
+                  while (dr.Read())
+                  {
+                      //column is 0 where the teacherName belong in my Teacher_Detail table
+
+                      string name = dr.GetString(0);
+
+                      //I tried to set the text of the checkListBox as the teacherName, but I can't somehow
+                      teacherCheckListBox.Text = name;
+
+                  }
+                  con.Close();
+              }
+              catch (Exception ex)
+              {
+                  MessageBox.Show(ex.Message);
+              }
+          }*/
+        void FIllchecklist()
+        {
+
+            con.Open();
+
+            DataSet ds = new DataSet();
+            SqlDataAdapter da1 = new SqlDataAdapter("SELECT * FROM Station", con);
+            da1.Fill(ds, "checklist");
+            checkedListBox1.DataSource = ds;//กำหนด DataSet
+            checkedListBox1.DisplayMember = "checklist.station_name";
+            checkedListBox1.ValueMember = "checklist.station_id";
+            con.Close();
+        }
+
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
 
                 var x = comboBox2.SelectedValue;
-
-                if (x is int)
+                if(x  is int)
                 {
-                    _lineModel.line_id = (int)x;
+                    checkedListBox1.Items.Clear();
+                    checkedListBox1.Items.Add(x);
+
+                
+                    string query = @"SELECT
+                                station_name,station_id
+                                FROM Station,Line
+                                where line_id = '" + comboBox2.Text + " ' " ;
                 }
 
+                if (x is int)
 
+                {
+                    model.line_id = (int)x;
+                }
 
             }
             catch (Exception error)
             {
                 throw error;
             }
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

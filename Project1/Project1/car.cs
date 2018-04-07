@@ -17,7 +17,7 @@ namespace Project1
         SqlConnection con = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Project1\Project1\ProjectTSP.mdf;Integrated Security = True; Connect Timeout = 30");
         SqlCommand command = new SqlCommand();
         carModel model = new carModel();
-        trainsetModel _trainsetModel = new trainsetModel();
+
 
         public static int car_id { get; set; }
         public car()
@@ -55,11 +55,11 @@ namespace Project1
             if (textBox3.Text != "" & textBox4.Text != ""& comboBox3.Text!=""&comboBox4.Text!="")
             {
                 con.Open();
-                command.CommandText = "insert into Car (car_serial,seat_type,seat_capacity,train_set_model_id) values( ' " + textBox3.Text + " ',' " + comboBox4.Text + " ', '"+ textBox4.Text+"' , ' "+_trainsetModel.train_set_model_id+" ') ";
+                command.CommandText = "insert into Car (car_serial,seat_type,seat_capacity,train_set_model_id) values( ' " + textBox3.Text + " ',' " + comboBox4.Text + " ', '"+ textBox4.Text+"' , ' "+model.train_set_model_id+" ') ";
                 command.ExecuteNonQuery();
                 con.Close();
                 model.car_id = 0;
-                _trainsetModel.train_set_model_id = 0;
+                model.train_set_model_id = 0;
                 MessageBox.Show("Save Complete");
                 textBox1.Clear();
                 textBox2.Clear();
@@ -105,13 +105,19 @@ namespace Project1
                 textBox4.Text = row.Cells["seat_capacity"].Value.ToString();
                 comboBox4.Text = row.Cells["seat_type"].Value.ToString();
                 comboBox3.Text = row.Cells["train_set_model_name"].Value.ToString();
-                _trainsetModel.train_set_model_id = (int)row.Cells["train_set_model_id"].Value;
-                _trainsetModel.train_set_model_name = row.Cells["train_set_model_name"].Value.ToString();
-                dataGridView1.Columns[0].HeaderText = "SERIAL ID";
+                model.train_set_model_id = (int)row.Cells["train_set_model_id"].Value;
+                model.train_set_model_name = row.Cells["train_set_model_name"].Value.ToString();
+               /* dataGridView1.Columns[0].HeaderText = "SERIAL ID";
                 dataGridView1.Columns[1].HeaderText = "SEAT TYPE";
                 dataGridView1.Columns[2].HeaderText = "SEAT CAPACITY";
-                dataGridView1.Columns[3].HeaderText = "TRAINSET MODEL NAME";
+                dataGridView1.Columns[3].HeaderText = "TRAINSET MODEL NAME";*/
 
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[1].HeaderText = "SERIAL ID";
+                dataGridView1.Columns[2].HeaderText = "SEAT TYPE";
+                dataGridView1.Columns[3].HeaderText = "SEAT CAPACITY";
+                dataGridView1.Columns[4].HeaderText = "TRAINSET MODEL NAME";
+                dataGridView1.Columns[5].Visible = false;
             }
         }
 
@@ -120,12 +126,12 @@ namespace Project1
             if (textBox3.Text != "" & textBox4.Text != "" & comboBox4.Text != "" &comboBox3.Text!="")
             {
                 con.Open();
-                command.CommandText = "update Car set car_serial= ' "+textBox3.Text+ " ' ,seat_type=' " + comboBox4.Text + "',seat_capacity=' " + textBox4.Text + " '   ,train_set_model_id= '  "+ _trainsetModel.train_set_model_id + "   '  where car_id=' " +model.car_id + " '  ";
+                command.CommandText = "update Car set car_serial= ' "+textBox3.Text+ " ' ,seat_type=' " + comboBox4.Text + "',seat_capacity=' " + textBox4.Text + " '   ,train_set_model_id= '  "+ model.train_set_model_id + "   '  where car_id=' " +model.car_id + " '  ";
                 command.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Edit Complete");
                 model.car_id = 0;
-                _trainsetModel.train_set_model_id = 0;
+                model.train_set_model_id = 0;
                     textBox1.Clear();
                 textBox2.Clear();
                 comboBox1.SelectedIndex = -1;
@@ -150,7 +156,7 @@ namespace Project1
                 con.Close();
                 MessageBox.Show("Delete Complete");
                 model.car_id = 0;
-                _trainsetModel.train_set_model_id = 0;
+               model.train_set_model_id = 0;
                 textBox1.Clear();
                 textBox2.Clear();
                 comboBox1.SelectedIndex = -1;
@@ -218,7 +224,7 @@ namespace Project1
 
                 if (x is int)
                 {
-                    _trainsetModel.train_set_model_id = (int)x;
+                   model.train_set_model_id = (int)x;
                 }
 
 

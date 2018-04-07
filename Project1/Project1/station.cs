@@ -17,7 +17,7 @@ namespace Project1
         SqlConnection con = new SqlConnection(@"Data Source = (LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Project1\Project1\ProjectTSP.mdf;Integrated Security = True; Connect Timeout = 30");
         SqlCommand command = new SqlCommand();
         stationModel model = new stationModel();
-        lineModel _lineModel = new lineModel();
+        
         public station()
         {
             InitializeComponent();
@@ -53,7 +53,7 @@ namespace Project1
       
                 if(x is int)
                 {
-                    _lineModel.line_id = (int) x;
+                    model.line_id = (int) x;
                 }
                
               
@@ -72,13 +72,13 @@ namespace Project1
             if (textBox1.Text != ""  & textBox3.Text!="" &comboBox1.Text!=""&comboBox2.Text!="")
             {
                 con.Open();
-                command.CommandText = "insert into Station (station_name,station_type,line_id,sequence) values( ' " + textBox1.Text + " ' , ' " +comboBox1.Text+" ' , '  " +_lineModel.line_id+" ' , ' " +textBox3.Text+ " ') ";
+                command.CommandText = "insert into Station (station_name,station_type,line_id,sequence) values( ' " + textBox1.Text + " ' , ' " +comboBox1.Text+" ' , '  " +model.line_id+" ' , ' " +textBox3.Text+ " ') ";
                 command.ExecuteNonQuery();
                 
                 con.Close();
                 MessageBox.Show("Save Complete");
                 model.station_id = 0;
-                _lineModel.line_id = 0;
+                model.line_id = 0;
                 textBox1.Clear();
                
                 textBox3.Clear();
@@ -129,7 +129,7 @@ namespace Project1
                 model.station_id = (int)row.Cells["station_id"].Value;
                 textBox1.Text = row.Cells["station_name"].Value.ToString();
                 comboBox1.Text = row.Cells["station_type"].Value.ToString();
-                _lineModel.line_id = (int)row.Cells["line_id"].Value;
+                model.line_id = (int)row.Cells["line_id"].Value;
 
                 comboBox2.Text = row.Cells["line_name"].Value.ToString();
                 textBox3.Text = row.Cells["sequence"].Value.ToString();
@@ -157,7 +157,7 @@ namespace Project1
                 textBox3.Clear();
                 comboBox1.SelectedIndex = -1;
                 comboBox2.SelectedIndex = -1;
-                _lineModel.line_id = 0;
+                model.line_id = 0;
 
 
             }
@@ -173,13 +173,13 @@ namespace Project1
             {
                 con.Open();
 
-                command.CommandText = "update Station set station_name=' " + textBox1.Text + " ' ,  station_type=' " + comboBox1.Text + " ' , line_id=' " + _lineModel.line_id + " ' , sequence=' " + textBox3.Text + " ' where station_id=' " + model.station_id + " '  ";
+                command.CommandText = "update Station set station_name=' " + textBox1.Text + " ' ,  station_type=' " + comboBox1.Text + " ' , line_id=' " + model.line_id + " ' , sequence=' " + textBox3.Text + " ' where station_id=' " + model.station_id + " '  ";
                 command.ExecuteNonQuery();
                 con.Close();
                 MessageBox.Show("Edit Complete");
                 model.station_id = 0;
                 textBox1.Clear();
-                _lineModel.line_id = 0;
+                model.line_id = 0;
                 textBox3.Clear();
                 comboBox1.SelectedIndex = -1;
                 comboBox2.SelectedIndex = -1;
